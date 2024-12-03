@@ -8,6 +8,7 @@ const ACCENT_COLOR = 'rgb(94, 114, 228)';
 const GRID_COLOR = 'rgb(230, 235, 240)';
 const SHADOW_COLOR = 'rgba(0, 0, 0, 0.15)';
 const G = 0.3;
+const TIME_SCALE = 0.6; // Slow down the simulation by 0.6 times
 
 // Game state
 let planets = [];
@@ -39,7 +40,7 @@ canvas.addEventListener('click', (e) => {
         const y = e.clientY - rect.top;
 
         const newPlanet = new Planet(
-            1, 25,
+            0.3, 10, // Further decreased mass and radius
             [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
             [x, y]
         );
@@ -159,7 +160,7 @@ function updatePlanets() {
     for (let i = 0; i < planets.length; i++) {
         const planetA = planets[i];
         planetA.handleControls(keys);
-        planetA.update(planets);
+        planetA.update(planets, TIME_SCALE); // Pass time scale to update function
 
         for (let j = i + 1; j < planets.length; j++) {
             const planetB = planets[j];
@@ -234,7 +235,7 @@ window.addEventListener('keydown', (e) => {
         const mouseY = lastMouseY - rect.top;
         
         const newPlanet = new Planet(
-            1, 25,
+            0.3, 10, // Further decreased mass and radius
             [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
             [mouseX, mouseY]
         );
@@ -305,12 +306,12 @@ canvas.addEventListener('touchend', (e) => {
 
         if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { // Check for a significant swipe
             const newPlanet = new Planet(
-                1, 25,
+                0.3, 10, // Further decreased mass and radius
                 [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
                 [swipeStartX, swipeStartY]
             );
-            newPlanet.v_x = dx * 0.1; // Adjust velocity scaling as needed
-            newPlanet.v_y = dy * 0.1;
+            newPlanet.v_x = dx * 0.05 * TIME_SCALE; // Adjusted for time scaling
+            newPlanet.v_y = dy * 0.05 * TIME_SCALE;
             planets.push(newPlanet);
         }
     }
@@ -419,7 +420,7 @@ function createPlanet() {
     const centerY = canvas.height / 2;
     
     const newPlanet = new Planet(
-        1, 25,
+        0.3, 10, // Further decreased mass and radius
         [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
         [centerX, centerY]
     );
