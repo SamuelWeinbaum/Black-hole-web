@@ -9,6 +9,7 @@ const GRID_COLOR = 'rgb(230, 235, 240)';
 const SHADOW_COLOR = 'rgba(0, 0, 0, 0.15)';
 const GRAVITY_STRENGTH = 0.000000000078125; // Keep the current gravity strength
 const TIME_SCALE = 0.0000875; // Keep the current simulation speed
+const MASS_INCREMENT = 0.1; // Adjust this value based on your actual increment
 
 // Game state
 let planets = [];
@@ -44,11 +45,11 @@ canvas.addEventListener('click', (e) => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        const mass = 0.3; // Initial mass
+        const mass = 0.3 + MASS_INCREMENT; // Initial mass plus one increment
         const size = mass * 10; // Direct proportional relationship
 
         const newPlanet = new Planet(
-            mass, size, // Use direct proportional size
+            mass, size, // Use adjusted mass and size
             [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
             [x, y]
         );
@@ -238,11 +239,11 @@ window.addEventListener('keydown', (e) => {
         const mouseX = lastMouseX - rect.left;
         const mouseY = lastMouseY - rect.top;
         
-        const mass = 0.3; // Initial mass
+        const mass = 0.3 + MASS_INCREMENT; // Initial mass plus one increment
         const size = mass * 10; // Direct proportional relationship
 
         const newPlanet = new Planet(
-            mass, size, // Use direct proportional size
+            mass, size, // Use adjusted mass and size
             [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
             [mouseX, mouseY]
         );
@@ -312,11 +313,11 @@ canvas.addEventListener('touchend', (e) => {
         const dy = swipeEndY - swipeStartY;
 
         if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { // Check for a significant swipe
-            const mass = 0.3; // Initial mass
+            const mass = 0.3 + MASS_INCREMENT; // Initial mass plus one increment
             const size = mass * 10; // Direct proportional relationship
 
             const newPlanet = new Planet(
-                mass, size, // Use direct proportional size
+                mass, size, // Use adjusted mass and size
                 [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
                 [swipeStartX, swipeStartY]
             );
