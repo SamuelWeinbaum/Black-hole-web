@@ -17,6 +17,7 @@ let paused = false;
 let runMainMenu = true;
 let adjustingVelocity = false;
 let velocityArrow = { x: 0, y: 0 };
+let addingPlanetsMode = true; // Flag to indicate if we're in the adding planets mode
 
 // Controls
 const keys = {};
@@ -32,17 +33,19 @@ window.addEventListener('mousemove', (e) => {
 });
 
 canvas.addEventListener('click', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    if (addingPlanetsMode) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-    const newPlanet = new Planet(
-        1, 25,
-        [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
-        [x, y]
-    );
-    planets.push(newPlanet);
-    selectedPlanet = newPlanet;
+        const newPlanet = new Planet(
+            1, 25,
+            [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
+            [x, y]
+        );
+        planets.push(newPlanet);
+        selectedPlanet = newPlanet;
+    }
 });
 
 function drawControls() {
@@ -81,23 +84,17 @@ function drawControls() {
 
 function startGame() {
     document.getElementById('title-screen').style.display = 'none';
-    const pauseButton = document.createElement('button');
-    pauseButton.id = 'pause-button';
-    pauseButton.className = 'info-toggle-button';
-    pauseButton.innerText = 'Pause';
-    pauseButton.onclick = togglePause;
-    document.body.appendChild(pauseButton);
-
-    const showButton = document.createElement('button');
-    showButton.className = 'show-button';
-    showButton.innerText = 'Show Controls';
-    showButton.onclick = toggleTouchControls;
-    document.body.appendChild(showButton);
 
     runMainMenu = false;
     resizeCanvas();
     drawControls();
-    planets = [];
+    planets = []; // Ensure no initial planets
+}
+
+function toggleAddPlanetsMode() {
+    addingPlanetsMode = !addingPlanetsMode;
+    const addButton = document.getElementById('add-button');
+    addButton.innerText = addingPlanetsMode ? 'Stop Adding' : 'Add Planets';
 }
 
 function quitGame() {
@@ -120,12 +117,8 @@ function gameLoop() {
     
     if (!runMainMenu) {
         drawGrid();
-        
-        if (!paused) {
-            updatePlanets();
-            updateParticles();
-        }
-        
+        updatePlanets();
+        updateParticles();
         drawParticles();
         drawPlanets();
     }
@@ -301,23 +294,25 @@ canvas.addEventListener('touchstart', (e) => {
 });
 
 canvas.addEventListener('touchend', (e) => {
-    const touch = e.changedTouches[0];
-    const rect = canvas.getBoundingClientRect();
-    const swipeEndX = touch.clientX - rect.left;
-    const swipeEndY = touch.clientY - rect.top;
+    if (addingPlanetsMode) {
+        const touch = e.changedTouches[0];
+        const rect = canvas.getBoundingClientRect();
+        const swipeEndX = touch.clientX - rect.left;
+        const swipeEndY = touch.clientY - rect.top;
 
-    const dx = swipeEndX - swipeStartX;
-    const dy = swipeEndY - swipeStartY;
+        const dx = swipeEndX - swipeStartX;
+        const dy = swipeEndY - swipeStartY;
 
-    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { // Check for a significant swipe
-        const newPlanet = new Planet(
-            1, 25,
-            [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
-            [swipeStartX, swipeStartY]
-        );
-        newPlanet.v_x = dx * 0.1; // Adjust velocity scaling as needed
-        newPlanet.v_y = dy * 0.1;
-        planets.push(newPlanet);
+        if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { // Check for a significant swipe
+            const newPlanet = new Planet(
+                1, 25,
+                [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
+                [swipeStartX, swipeStartY]
+            );
+            newPlanet.v_x = dx * 0.1; // Adjust velocity scaling as needed
+            newPlanet.v_y = dy * 0.1;
+            planets.push(newPlanet);
+        }
     }
 });
 
@@ -440,23 +435,6 @@ function toggleInfoBar() {
         controls.style.display = 'none';
     }
 }
-
-function togglePause() {
-    paused = !paused;
-    const pauseButton = document.getElementById('pause-button');
-    if (paused) {
-        pauseButton.innerText = 'Resume';
-        document.body.style.backgroundColor = 'rgb(30, 30, 30)'; // Dark mode
-        canvas.style.filter = 'brightness(0.5)'; // Dim the canvas for effect
-    } else {
-        pauseButton.innerText = 'Pause';
-        document.body.style.backgroundColor = 'rgb(245, 247, 250)'; // Light mode
-        canvas.style.filter = 'brightness(1)'; // Reset canvas brightness
-    }
-}
-
-// Add a pause button
-document.body.insertAdjacentHTML('beforeend', '<button id="pause-button" class="info-toggle-button" onclick="togglePause()">Pause</button>');
 
 // Initialize game
 gameLoop();
