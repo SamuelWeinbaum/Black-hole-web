@@ -81,11 +81,23 @@ function drawControls() {
 
 function startGame() {
     document.getElementById('title-screen').style.display = 'none';
-    document.body.insertAdjacentHTML('beforeend', '<button id="pause-button" class="info-toggle-button" onclick="togglePause()">Pause</button>');
-    document.querySelector('.show-button').style.display = 'block';
+    const pauseButton = document.createElement('button');
+    pauseButton.id = 'pause-button';
+    pauseButton.className = 'info-toggle-button';
+    pauseButton.innerText = 'Pause';
+    pauseButton.onclick = togglePause;
+    document.body.appendChild(pauseButton);
+
+    const showButton = document.createElement('button');
+    showButton.className = 'show-button';
+    showButton.innerText = 'Show Controls';
+    showButton.onclick = toggleTouchControls;
+    document.body.appendChild(showButton);
+
     runMainMenu = false;
     resizeCanvas();
     drawControls();
+    planets = [];
 }
 
 function quitGame() {
@@ -197,7 +209,7 @@ function drawPlanets() {
 
 function drawVelocityArrow(ctx, planet) {
     if (paused && planet === selectedPlanet) {
-        const arrowLength = 0.5;
+        const arrowLength = 5;
         const arrowWidth = 5;
         const endX = planet.x + velocityArrow.x * arrowLength;
         const endY = planet.y + velocityArrow.y * arrowLength;
@@ -278,70 +290,35 @@ planets.push(
 // Touch handling for mobile devices
 let lastTouchX = null;
 let lastTouchY = null;
-let touchInterval = null;
+let swipeStartX = null;
+let swipeStartY = null;
 
 canvas.addEventListener('touchstart', (e) => {
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
-    
-    if (paused) {
-        selectedPlanet = null;
-        planets.forEach(planet => {
-            const dx = planet.x - x;
-            const dy = planet.y - y;
-            if (dx * dx + dy * dy < planet.radius * planet.radius) {
-                selectedPlanet = planet;
-                adjustingVelocity = true;
-                velocityArrow.x = planet.v_x;
-                velocityArrow.y = planet.v_y;
-            }
-        });
-    } else {
-        selectedPlanet = null;
-        planets.forEach(planet => {
-            const dx = planet.x - x;
-            const dy = planet.y - y;
-            if (dx * dx + dy * dy < planet.radius * planet.radius) {
-                selectedPlanet = planet;
-            }
-        });
-    }
-
-    lastTouchX = x;
-    lastTouchY = y;
+    swipeStartX = touch.clientX - rect.left;
+    swipeStartY = touch.clientY - rect.top;
 });
 
-canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
+canvas.addEventListener('touchend', (e) => {
+    const touch = e.changedTouches[0];
     const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
+    const swipeEndX = touch.clientX - rect.left;
+    const swipeEndY = touch.clientY - rect.top;
 
-    if (paused && adjustingVelocity && selectedPlanet) {
-        velocityArrow.x = (x - selectedPlanet.x) * 0.1; // Adjust multiplier for desired velocity
-        velocityArrow.y = (y - selectedPlanet.y) * 0.1;
-    } else if (selectedPlanet) {
-        selectedPlanet.x = x;
-        selectedPlanet.y = y;
-        selectedPlanet.v_x = (x - lastTouchX) * 0.2; // Increased multiplier for more momentum
-        selectedPlanet.v_y = (y - lastTouchY) * 0.2;
+    const dx = swipeEndX - swipeStartX;
+    const dy = swipeEndY - swipeStartY;
+
+    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { // Check for a significant swipe
+        const newPlanet = new Planet(
+            1, 25,
+            [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
+            [swipeStartX, swipeStartY]
+        );
+        newPlanet.v_x = dx * 0.1; // Adjust velocity scaling as needed
+        newPlanet.v_y = dy * 0.1;
+        planets.push(newPlanet);
     }
-
-    lastTouchX = x;
-    lastTouchY = y;
-}, { passive: false });
-
-canvas.addEventListener('touchend', () => {
-    if (paused && adjustingVelocity && selectedPlanet) {
-        selectedPlanet.v_x = velocityArrow.x;
-        selectedPlanet.v_y = velocityArrow.y;
-        adjustingVelocity = false;
-    }
-    lastTouchX = null;
-    lastTouchY = null;
 });
 
 function startContinuousMovement(direction) {
@@ -466,12 +443,15 @@ function toggleInfoBar() {
 
 function togglePause() {
     paused = !paused;
+    const pauseButton = document.getElementById('pause-button');
     if (paused) {
-        document.getElementById('pause-button').innerText = 'Resume';
-        document.body.style.backgroundColor = 'rgb(30, 30, 30)';
+        pauseButton.innerText = 'Resume';
+        document.body.style.backgroundColor = 'rgb(30, 30, 30)'; // Dark mode
+        canvas.style.filter = 'brightness(0.5)'; // Dim the canvas for effect
     } else {
-        document.getElementById('pause-button').innerText = 'Pause';
-        document.body.style.backgroundColor = 'rgb(245, 247, 250)';
+        pauseButton.innerText = 'Pause';
+        document.body.style.backgroundColor = 'rgb(245, 247, 250)'; // Light mode
+        canvas.style.filter = 'brightness(1)'; // Reset canvas brightness
     }
 }
 
