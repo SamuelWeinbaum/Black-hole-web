@@ -32,18 +32,19 @@ window.addEventListener('mousemove', (e) => {
 });
 
 canvas.addEventListener('click', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    selectedPlanet = null;
-    planets.forEach(planet => {
-        const dx = planet.x - x;
-        const dy = planet.y - y;
-        if (dx * dx + dy * dy < planet.radius * planet.radius) {
-            selectedPlanet = planet;
-        }
-    });
+    if (paused) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const newPlanet = new Planet(
+            1, 25,
+            [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
+            [x, y]
+        );
+        planets.push(newPlanet);
+        selectedPlanet = newPlanet;
+    }
 });
 
 function drawControls() {
@@ -82,6 +83,7 @@ function drawControls() {
 
 function startGame() {
     document.getElementById('title-screen').style.display = 'none';
+    document.body.insertAdjacentHTML('beforeend', '<button id="pause-button" class="info-toggle-button" onclick="togglePause()">Pause</button>');
     runMainMenu = false;
     resizeCanvas();
     drawControls();
@@ -196,7 +198,7 @@ function drawPlanets() {
 
 function drawVelocityArrow(ctx, planet) {
     if (paused && planet === selectedPlanet) {
-        const arrowLength = 10;
+        const arrowLength = 5;
         const arrowWidth = 5;
         const endX = planet.x + velocityArrow.x * arrowLength;
         const endY = planet.y + velocityArrow.y * arrowLength;
