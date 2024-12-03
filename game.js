@@ -82,6 +82,7 @@ function drawControls() {
 function startGame() {
     document.getElementById('title-screen').style.display = 'none';
     document.body.insertAdjacentHTML('beforeend', '<button id="pause-button" class="info-toggle-button" onclick="togglePause()">Pause</button>');
+    document.querySelector('.show-button').style.display = 'block';
     runMainMenu = false;
     resizeCanvas();
     drawControls();
@@ -196,7 +197,7 @@ function drawPlanets() {
 
 function drawVelocityArrow(ctx, planet) {
     if (paused && planet === selectedPlanet) {
-        const arrowLength = 1;
+        const arrowLength = 0.5;
         const arrowWidth = 5;
         const endX = planet.x + velocityArrow.x * arrowLength;
         const endY = planet.y + velocityArrow.y * arrowLength;
@@ -467,8 +468,10 @@ function togglePause() {
     paused = !paused;
     if (paused) {
         document.getElementById('pause-button').innerText = 'Resume';
+        document.body.style.backgroundColor = 'rgb(30, 30, 30)';
     } else {
         document.getElementById('pause-button').innerText = 'Pause';
+        document.body.style.backgroundColor = 'rgb(245, 247, 250)';
     }
 }
 
