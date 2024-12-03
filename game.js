@@ -45,10 +45,10 @@ canvas.addEventListener('click', (e) => {
         const y = e.clientY - rect.top;
 
         const mass = 0.3; // Initial mass
-        const size = calculateSize(mass); // Calculate size based on mass
+        const size = mass * 10; // Direct proportional relationship
 
         const newPlanet = new Planet(
-            mass, size, // Use calculated size
+            mass, size, // Use direct proportional size
             [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
             [x, y]
         );
@@ -239,10 +239,10 @@ window.addEventListener('keydown', (e) => {
         const mouseY = lastMouseY - rect.top;
         
         const mass = 0.3; // Initial mass
-        const size = calculateSize(mass); // Calculate size based on mass
+        const size = mass * 10; // Direct proportional relationship
 
         const newPlanet = new Planet(
-            mass, size, // Use calculated size
+            mass, size, // Use direct proportional size
             [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
             [mouseX, mouseY]
         );
@@ -313,10 +313,10 @@ canvas.addEventListener('touchend', (e) => {
 
         if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { // Check for a significant swipe
             const mass = 0.3; // Initial mass
-            const size = calculateSize(mass); // Calculate size based on mass
+            const size = mass * 10; // Direct proportional relationship
 
             const newPlanet = new Planet(
-                mass, size, // Use calculated size
+                mass, size, // Use direct proportional size
                 [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
                 [swipeStartX, swipeStartY]
             );
