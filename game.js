@@ -8,7 +8,7 @@ const ACCENT_COLOR = 'rgb(94, 114, 228)';
 const GRID_COLOR = 'rgb(230, 235, 240)';
 const SHADOW_COLOR = 'rgba(0, 0, 0, 0.15)';
 const GRAVITY_STRENGTH = 0.000000000078125; // Keep the current gravity strength
-const TIME_SCALE = 0.00002917; // Slow down the simulation to 1/3 of the current speed
+const TIME_SCALE = 0.0000875; // Keep the current simulation speed
 
 // Game state
 let planets = [];
@@ -33,14 +33,22 @@ window.addEventListener('mousemove', (e) => {
     lastMouseY = e.clientY;
 });
 
+// Function to calculate size based on mass
+function calculateSize(mass) {
+    return Math.sqrt(mass) * 10; // Adjust the factor as needed
+}
+
 canvas.addEventListener('click', (e) => {
     if (addingPlanetsMode) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
+        const mass = 0.3; // Initial mass
+        const size = calculateSize(mass); // Calculate size based on mass
+
         const newPlanet = new Planet(
-            0.3, 10, // Keep the current mass and radius
+            mass, size, // Use calculated size
             [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
             [x, y]
         );
@@ -230,8 +238,11 @@ window.addEventListener('keydown', (e) => {
         const mouseX = lastMouseX - rect.left;
         const mouseY = lastMouseY - rect.top;
         
+        const mass = 0.3; // Initial mass
+        const size = calculateSize(mass); // Calculate size based on mass
+
         const newPlanet = new Planet(
-            0.3, 10, // Further decreased mass and radius
+            mass, size, // Use calculated size
             [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
             [mouseX, mouseY]
         );
@@ -301,8 +312,11 @@ canvas.addEventListener('touchend', (e) => {
         const dy = swipeEndY - swipeStartY;
 
         if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { // Check for a significant swipe
+            const mass = 0.3; // Initial mass
+            const size = calculateSize(mass); // Calculate size based on mass
+
             const newPlanet = new Planet(
-                0.3, 10, // Keep the current mass and radius
+                mass, size, // Use calculated size
                 [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
                 [swipeStartX, swipeStartY]
             );
