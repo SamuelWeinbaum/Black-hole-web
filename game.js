@@ -8,7 +8,7 @@ const ACCENT_COLOR = 'rgb(94, 114, 228)';
 const GRID_COLOR = 'rgb(230, 235, 240)';
 const SHADOW_COLOR = 'rgba(0, 0, 0, 0.15)';
 const GRAVITY_STRENGTH = 0.0000125; // Decrease gravity strength to 1/100 of its current value (previously 0.00125)
-const TIME_SCALE = 0.000175; // Slow down the simulation to 1/3 of the current speed
+const TIME_SCALE = 0.0000875; // Slow down the simulation to half of the current speed
 
 // Game state
 let planets = [];
@@ -40,7 +40,7 @@ canvas.addEventListener('click', (e) => {
         const y = e.clientY - rect.top;
 
         const newPlanet = new Planet(
-            0.3, 10, // Further decreased mass and radius
+            0.15, 5, // Decreased mass and radius by half
             [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
             [x, y]
         );
@@ -302,12 +302,12 @@ canvas.addEventListener('touchend', (e) => {
 
         if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { // Check for a significant swipe
             const newPlanet = new Planet(
-                0.3, 10, // Further decreased mass and radius
+                0.15, 5, // Decreased mass and radius by half
                 [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
                 [swipeStartX, swipeStartY]
             );
-            newPlanet.v_x = dx * 39.2 * TIME_SCALE; // Increased velocity scaling by a factor of 20
-            newPlanet.v_y = dy * 39.2 * TIME_SCALE;
+            newPlanet.v_x = dx * 19.6 * TIME_SCALE; // Decreased velocity scaling by half
+            newPlanet.v_y = dy * 19.6 * TIME_SCALE;
             planets.push(newPlanet);
         }
     }
