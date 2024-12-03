@@ -15,6 +15,8 @@ let particles = [];
 let selectedPlanet = null;
 let paused = false;
 let runMainMenu = true;
+let adjustingVelocity = false;
+let velocityArrow = { x: 0, y: 0 };
 
 // Controls
 const keys = {};
@@ -186,7 +188,21 @@ function updatePlanets() {
 }
 
 function drawPlanets() {
-    planets.forEach(planet => planet.draw(ctx));
+    planets.forEach(planet => {
+        planet.draw(ctx);
+        drawVelocityArrow(ctx, planet);
+    });
+}
+
+function drawVelocityArrow(ctx, planet) {
+    if (paused && planet === selectedPlanet) {
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(planet.x, planet.y);
+        ctx.lineTo(planet.x + velocityArrow.x * 10, planet.y + velocityArrow.y * 10); // Scale arrow for visibility
+        ctx.stroke();
+    }
 }
 
 // Space key handler to create new planets
@@ -254,14 +270,28 @@ canvas.addEventListener('touchstart', (e) => {
     const x = touch.clientX - rect.left;
     const y = touch.clientY - rect.top;
     
-    selectedPlanet = null;
-    planets.forEach(planet => {
-        const dx = planet.x - x;
-        const dy = planet.y - y;
-        if (dx * dx + dy * dy < planet.radius * planet.radius) {
-            selectedPlanet = planet;
-        }
-    });
+    if (paused) {
+        selectedPlanet = null;
+        planets.forEach(planet => {
+            const dx = planet.x - x;
+            const dy = planet.y - y;
+            if (dx * dx + dy * dy < planet.radius * planet.radius) {
+                selectedPlanet = planet;
+                adjustingVelocity = true;
+                velocityArrow.x = planet.v_x;
+                velocityArrow.y = planet.v_y;
+            }
+        });
+    } else {
+        selectedPlanet = null;
+        planets.forEach(planet => {
+            const dx = planet.x - x;
+            const dy = planet.y - y;
+            if (dx * dx + dy * dy < planet.radius * planet.radius) {
+                selectedPlanet = planet;
+            }
+        });
+    }
 
     lastTouchX = x;
     lastTouchY = y;
@@ -274,11 +304,14 @@ canvas.addEventListener('touchmove', (e) => {
     const x = touch.clientX - rect.left;
     const y = touch.clientY - rect.top;
 
-    if (selectedPlanet) {
+    if (paused && adjustingVelocity && selectedPlanet) {
+        velocityArrow.x = (x - selectedPlanet.x) * 0.1; // Adjust multiplier for desired velocity
+        velocityArrow.y = (y - selectedPlanet.y) * 0.1;
+    } else if (selectedPlanet) {
         selectedPlanet.x = x;
         selectedPlanet.y = y;
-        selectedPlanet.v_x = (x - lastTouchX) * 0.1; // Adjust multiplier for desired momentum
-        selectedPlanet.v_y = (y - lastTouchY) * 0.1;
+        selectedPlanet.v_x = (x - lastTouchX) * 0.2; // Increased multiplier for more momentum
+        selectedPlanet.v_y = (y - lastTouchY) * 0.2;
     }
 
     lastTouchX = x;
@@ -286,6 +319,11 @@ canvas.addEventListener('touchmove', (e) => {
 }, { passive: false });
 
 canvas.addEventListener('touchend', () => {
+    if (paused && adjustingVelocity && selectedPlanet) {
+        selectedPlanet.v_x = velocityArrow.x;
+        selectedPlanet.v_y = velocityArrow.y;
+        adjustingVelocity = false;
+    }
     lastTouchX = null;
     lastTouchY = null;
 });
@@ -389,6 +427,18 @@ function toggleInfoBar() {
         controls.style.display = 'none';
     }
 }
+
+function togglePause() {
+    paused = !paused;
+    if (paused) {
+        document.getElementById('pause-button').innerText = 'Resume';
+    } else {
+        document.getElementById('pause-button').innerText = 'Pause';
+    }
+}
+
+// Add a pause button
+document.body.insertAdjacentHTML('beforeend', '<button id="pause-button" class="info-toggle-button" onclick="togglePause()">Pause</button>');
 
 // Initialize game
 gameLoop();
