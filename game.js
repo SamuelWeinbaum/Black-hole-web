@@ -8,7 +8,7 @@ const ACCENT_COLOR = 'rgb(94, 114, 228)';
 const GRID_COLOR = 'rgb(230, 235, 240)';
 const SHADOW_COLOR = 'rgba(0, 0, 0, 0.15)';
 const GRAVITY_STRENGTH = 1.5; // Increase gravity strength by 1.5 times
-const TIME_SCALE = 0.2; // Slow down the simulation by 1.5 times (previously 0.3)
+const TIME_SCALE = 0.14; // Adjusted to make the simulation 0.7 times as fast
 
 // Game state
 let planets = [];
@@ -75,10 +75,6 @@ function drawControls() {
         <div class="control-item">
             <span class="key">X</span>
             <span class="action">Clear all planets</span>
-        </div>
-        <div class="control-item">
-            <span class="key">C</span>
-            <span class="action">Clear selected planet</span>
         </div>
     `;
 }
