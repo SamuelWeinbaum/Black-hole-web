@@ -332,5 +332,18 @@ function toggleTouchControls() {
     }
 }
 
+function createPlanet() {
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    
+    const newPlanet = new Planet(
+        1, 25,
+        [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
+        [centerX, centerY]
+    );
+    planets.push(newPlanet);
+    selectedPlanet = newPlanet;
+}
+
 // Initialize game
 gameLoop();
