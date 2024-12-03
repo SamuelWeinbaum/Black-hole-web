@@ -196,12 +196,27 @@ function drawPlanets() {
 
 function drawVelocityArrow(ctx, planet) {
     if (paused && planet === selectedPlanet) {
+        const arrowLength = 10;
+        const arrowWidth = 5;
+        const endX = planet.x + velocityArrow.x * arrowLength;
+        const endY = planet.y + velocityArrow.y * arrowLength;
+
         ctx.strokeStyle = 'red';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(planet.x, planet.y);
-        ctx.lineTo(planet.x + velocityArrow.x * 10, planet.y + velocityArrow.y * 10); // Scale arrow for visibility
+        ctx.lineTo(endX, endY);
         ctx.stroke();
+
+        // Draw arrowhead
+        const angle = Math.atan2(velocityArrow.y, velocityArrow.x);
+        ctx.beginPath();
+        ctx.moveTo(endX, endY);
+        ctx.lineTo(endX - arrowWidth * Math.cos(angle - Math.PI / 6), endY - arrowWidth * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(endX - arrowWidth * Math.cos(angle + Math.PI / 6), endY - arrowWidth * Math.sin(angle + Math.PI / 6));
+        ctx.lineTo(endX, endY);
+        ctx.fillStyle = 'red';
+        ctx.fill();
     }
 }
 
@@ -366,6 +381,26 @@ function moveSelectedPlanet(direction) {
         }
     }
 }
+
+let massInterval = null;
+
+function startMassAdjustment(action) {
+    if (massInterval) clearInterval(massInterval);
+    massInterval = setInterval(() => adjustMass(action), 100);
+}
+
+function stopMassAdjustment() {
+    if (massInterval) clearInterval(massInterval);
+}
+
+// Bind touch events to mass adjustment buttons
+document.querySelectorAll('.touch-button').forEach(button => {
+    const action = button.getAttribute('onclick').match(/adjustMass\('(.*?)'\)/);
+    if (action) {
+        button.addEventListener('touchstart', () => startMassAdjustment(action[1]));
+        button.addEventListener('touchend', stopMassAdjustment);
+    }
+});
 
 function adjustMass(action) {
     if (selectedPlanet) {

@@ -98,6 +98,12 @@
             background: rgb(70, 80, 95);
             color: white;
         }
+        .description {
+            font-size: 16px;
+            color: rgb(70, 80, 95);
+            margin-top: 20px;
+            max-width: 80%;
+        }
         /* Touch controls */
         #touch-controls {
             display: none;
@@ -176,14 +182,11 @@
         <h2 class="subtitle">by Samuel Weinbaum</h2>
         <button class="button start-button" onclick="startGame()">Start</button>
         <button class="button quit-button" onclick="quitGame()">Quit</button>
+        <p class="description">Explore the physics of celestial bodies by creating and manipulating planets. Adjust their mass and velocity to see how they interact in a simulated universe.</p>
     </div>
     <canvas id="gameCanvas"></canvas>
     <div id="controls"></div>
     <div id="touch-controls">
-        <button class="touch-button" onclick="moveSelectedPlanet('up')">↑</button>
-        <button class="touch-button" onclick="moveSelectedPlanet('left')">←</button>
-        <button class="touch-button" onclick="moveSelectedPlanet('down')">↓</button>
-        <button class="touch-button" onclick="moveSelectedPlanet('right')">→</button>
         <button class="touch-button" onclick="adjustMass('increase')">+</button>
         <button class="touch-button" onclick="adjustMass('decrease')">-</button>
         <button class="touch-button" onclick="clearAllPlanets()">X</button>
