@@ -94,10 +94,6 @@
             background: rgb(94, 114, 228);
             color: white;
         }
-        .quit-button {
-            background: rgb(70, 80, 95);
-            color: white;
-        }
         .description {
             font-size: 16px;
             color: rgb(70, 80, 95);
@@ -156,7 +152,7 @@
         }
         .info-toggle-button {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
             z-index: 3;
             background: rgb(70, 80, 95);
@@ -181,7 +177,6 @@
         <h1 class="title">Black Hole Physics</h1>
         <h2 class="subtitle">by Samuel Weinbaum</h2>
         <button class="button start-button" onclick="startGame()">Start</button>
-        <button class="button quit-button" onclick="quitGame()">Quit</button>
         <p class="description">Explore the physics of celestial bodies by creating and manipulating planets. Adjust their mass and velocity to see how they interact in a simulated universe.</p>
     </div>
     <canvas id="gameCanvas"></canvas>
@@ -191,7 +186,6 @@
         <button class="touch-button" onclick="adjustMass('decrease')">-</button>
         <button class="touch-button" onclick="clearAllPlanets()">X</button>
         <button class="touch-button" onclick="clearSelectedPlanet()">C</button>
-        <button class="touch-button" onclick="createPlanet()">🌍</button>
         <button class="touch-button close-button" onclick="toggleTouchControls()">X</button>
     </div>
     <button class="show-button" onclick="toggleTouchControls()">Show Controls</button>

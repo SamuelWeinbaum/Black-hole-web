@@ -111,8 +111,6 @@ function gameLoop() {
         if (!paused) {
             updatePlanets();
             updateParticles();
-        } else {
-            drawPaths(); // Draw paths when paused
         }
         
         drawParticles();
@@ -133,7 +131,7 @@ function drawParticles() {
 
 function drawGrid() {
     const gridSpacing = Math.min(canvas.width, canvas.height) / 20;
-    ctx.strokeStyle = GRID_COLOR;
+    ctx.strokeStyle = paused ? 'rgba(230, 235, 240, 0.8)' : GRID_COLOR;
     ctx.lineWidth = 1;
 
     for (let x = 0; x < canvas.width; x += gridSpacing) {
@@ -198,7 +196,7 @@ function drawPlanets() {
 
 function drawVelocityArrow(ctx, planet) {
     if (paused && planet === selectedPlanet) {
-        const arrowLength = 3;
+        const arrowLength = 1;
         const arrowWidth = 5;
         const endX = planet.x + velocityArrow.x * arrowLength;
         const endY = planet.y + velocityArrow.y * arrowLength;
@@ -476,31 +474,6 @@ function togglePause() {
 
 // Add a pause button
 document.body.insertAdjacentHTML('beforeend', '<button id="pause-button" class="info-toggle-button" onclick="togglePause()">Pause</button>');
-
-function drawPaths() {
-    planets.forEach(planet => {
-        ctx.strokeStyle = 'rgba(94, 114, 228, 0.5)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(planet.x, planet.y);
-
-        let tempX = planet.x;
-        let tempY = planet.y;
-        let tempVx = planet.v_x;
-        let tempVy = planet.v_y;
-
-        for (let i = 0; i < 100; i++) { // Simulate 100 frames ahead
-            tempX += tempVx;
-            tempY += tempVy;
-            ctx.lineTo(tempX, tempY);
-
-            // Simple gravity effect (optional)
-            tempVy += G;
-        }
-
-        ctx.stroke();
-    });
-}
 
 // Initialize game
 gameLoop();
