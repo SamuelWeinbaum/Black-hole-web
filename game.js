@@ -46,8 +46,8 @@ canvas.addEventListener('click', (e) => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        const mass = 0.3; // Initial mass
-        const size = mass * 10 + SIZE_INCREMENT; // Initial size plus one increment
+        const mass = 0.3; // Keep the initial mass
+        const size = (mass * 10 + SIZE_INCREMENT) * 3; // Increase initial size by a factor of 3
 
         const newPlanet = new Planet(
             mass, size, // Use adjusted size
@@ -241,7 +241,7 @@ window.addEventListener('keydown', (e) => {
         const mouseY = lastMouseY - rect.top;
         
         const mass = 0.3; // Initial mass
-        const size = mass * 10 + SIZE_INCREMENT; // Initial size plus one increment
+        const size = (mass * 10 + SIZE_INCREMENT) * 3; // Increase initial size by a factor of 3
 
         const newPlanet = new Planet(
             mass, size, // Use adjusted size
@@ -314,8 +314,8 @@ canvas.addEventListener('touchend', (e) => {
         const dy = swipeEndY - swipeStartY;
 
         if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { // Check for a significant swipe
-            const mass = 0.3; // Initial mass
-            const size = mass * 10 + SIZE_INCREMENT; // Initial size plus one increment
+            const mass = 0.3; // Keep the initial mass
+            const size = (mass * 10 + SIZE_INCREMENT) * 3; // Increase initial size by a factor of 3
 
             const newPlanet = new Planet(
                 mass, size, // Use adjusted size
