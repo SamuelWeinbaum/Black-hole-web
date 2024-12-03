@@ -244,6 +244,10 @@ planets.push(
 );
 
 // Touch handling for mobile devices
+let lastTouchX = null;
+let lastTouchY = null;
+let touchInterval = null;
+
 canvas.addEventListener('touchstart', (e) => {
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
@@ -258,6 +262,9 @@ canvas.addEventListener('touchstart', (e) => {
             selectedPlanet = planet;
         }
     });
+
+    lastTouchX = x;
+    lastTouchY = y;
 });
 
 canvas.addEventListener('touchmove', (e) => {
@@ -270,8 +277,37 @@ canvas.addEventListener('touchmove', (e) => {
     if (selectedPlanet) {
         selectedPlanet.x = x;
         selectedPlanet.y = y;
+        selectedPlanet.v_x = (x - lastTouchX) * 0.1; // Adjust multiplier for desired momentum
+        selectedPlanet.v_y = (y - lastTouchY) * 0.1;
     }
+
+    lastTouchX = x;
+    lastTouchY = y;
 }, { passive: false });
+
+canvas.addEventListener('touchend', () => {
+    lastTouchX = null;
+    lastTouchY = null;
+});
+
+function startContinuousMovement(direction) {
+    if (touchInterval) clearInterval(touchInterval);
+    touchInterval = setInterval(() => moveSelectedPlanet(direction), 100);
+}
+
+function stopContinuousMovement() {
+    if (touchInterval) clearInterval(touchInterval);
+}
+
+// Bind touch events to arrow buttons
+document.querySelectorAll('.touch-button').forEach(button => {
+    button.addEventListener('touchstart', (e) => {
+        const direction = e.target.getAttribute('onclick').match(/'(.*?)'/)[1];
+        startContinuousMovement(direction);
+    });
+
+    button.addEventListener('touchend', stopContinuousMovement);
+});
 
 function moveSelectedPlanet(direction) {
     if (selectedPlanet) {
