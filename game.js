@@ -345,5 +345,14 @@ function createPlanet() {
     selectedPlanet = newPlanet;
 }
 
+function toggleInfoBar() {
+    const controls = document.getElementById('controls');
+    if (controls.style.display === 'none' || controls.style.display === '') {
+        controls.style.display = 'block';
+    } else {
+        controls.style.display = 'none';
+    }
+}
+
 // Initialize game
 gameLoop();
