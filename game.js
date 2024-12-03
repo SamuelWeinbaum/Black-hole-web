@@ -32,19 +32,17 @@ window.addEventListener('mousemove', (e) => {
 });
 
 canvas.addEventListener('click', (e) => {
-    if (paused) {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-        const newPlanet = new Planet(
-            1, 25,
-            [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
-            [x, y]
-        );
-        planets.push(newPlanet);
-        selectedPlanet = newPlanet;
-    }
+    const newPlanet = new Planet(
+        1, 25,
+        [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
+        [x, y]
+    );
+    planets.push(newPlanet);
+    selectedPlanet = newPlanet;
 });
 
 function drawControls() {
@@ -113,6 +111,8 @@ function gameLoop() {
         if (!paused) {
             updatePlanets();
             updateParticles();
+        } else {
+            drawPaths(); // Draw paths when paused
         }
         
         drawParticles();
@@ -198,7 +198,7 @@ function drawPlanets() {
 
 function drawVelocityArrow(ctx, planet) {
     if (paused && planet === selectedPlanet) {
-        const arrowLength = 5;
+        const arrowLength = 3;
         const arrowWidth = 5;
         const endX = planet.x + velocityArrow.x * arrowLength;
         const endY = planet.y + velocityArrow.y * arrowLength;
@@ -476,6 +476,31 @@ function togglePause() {
 
 // Add a pause button
 document.body.insertAdjacentHTML('beforeend', '<button id="pause-button" class="info-toggle-button" onclick="togglePause()">Pause</button>');
+
+function drawPaths() {
+    planets.forEach(planet => {
+        ctx.strokeStyle = 'rgba(94, 114, 228, 0.5)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(planet.x, planet.y);
+
+        let tempX = planet.x;
+        let tempY = planet.y;
+        let tempVx = planet.v_x;
+        let tempVy = planet.v_y;
+
+        for (let i = 0; i < 100; i++) { // Simulate 100 frames ahead
+            tempX += tempVx;
+            tempY += tempVy;
+            ctx.lineTo(tempX, tempY);
+
+            // Simple gravity effect (optional)
+            tempVy += G;
+        }
+
+        ctx.stroke();
+    });
+}
 
 // Initialize game
 gameLoop();
