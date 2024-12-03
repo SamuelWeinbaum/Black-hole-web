@@ -306,9 +306,10 @@ canvas.addEventListener('touchend', (e) => {
                 [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
                 [swipeStartX, swipeStartY]
             );
-            newPlanet.v_x = dx * 19.6 * TIME_SCALE; // Decreased velocity scaling by a factor of 1/10
-            newPlanet.v_y = dy * 19.6 * TIME_SCALE;
+            newPlanet.v_x = dx * 98 * TIME_SCALE; // Increased velocity scaling by a factor of 5
+            newPlanet.v_y = dy * 98 * TIME_SCALE;
             planets.push(newPlanet);
+            selectedPlanet = newPlanet;
         }
     }
 });
