@@ -8,7 +8,7 @@ const ACCENT_COLOR = 'rgb(94, 114, 228)';
 const GRID_COLOR = 'rgb(230, 235, 240)';
 const SHADOW_COLOR = 'rgba(0, 0, 0, 0.15)';
 const GRAVITY_STRENGTH = 1.5; // Increase gravity strength by 1.5 times
-const TIME_SCALE = 0.07; // Decrease the simulation speed by half
+const TIME_SCALE = 0.042; // Slow down the simulation to 0.6 times the current speed
 
 // Game state
 let planets = [];
