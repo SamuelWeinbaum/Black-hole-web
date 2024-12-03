@@ -7,7 +7,7 @@ const UI_COLOR = 'rgb(70, 80, 95)';
 const ACCENT_COLOR = 'rgb(94, 114, 228)';
 const GRID_COLOR = 'rgb(230, 235, 240)';
 const SHADOW_COLOR = 'rgba(0, 0, 0, 0.15)';
-const GRAVITY_STRENGTH = 0.000003125; // Further decrease gravity strength to half of its current value
+const GRAVITY_STRENGTH = 0.00000078125; // Decrease gravity strength to a quarter of its current value
 const TIME_SCALE = 0.0000875; // Keep the current simulation speed
 
 // Game state
