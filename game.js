@@ -7,8 +7,8 @@ const UI_COLOR = 'rgb(70, 80, 95)';
 const ACCENT_COLOR = 'rgb(94, 114, 228)';
 const GRID_COLOR = 'rgb(230, 235, 240)';
 const SHADOW_COLOR = 'rgba(0, 0, 0, 0.15)';
-const GRAVITY_STRENGTH = 1.5; // Increase gravity strength by 1.5 times
-const TIME_SCALE = 0.021; // Slow down the simulation to half of the current speed
+const GRAVITY_STRENGTH = 0.75; // Weaken gravity to half of its current strength (previously 1.5)
+const TIME_SCALE = 0.0105; // Slow down the simulation to half of the current speed
 
 // Game state
 let planets = [];
@@ -306,7 +306,7 @@ canvas.addEventListener('touchend', (e) => {
                 [Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100],
                 [swipeStartX, swipeStartY]
             );
-            newPlanet.v_x = dx * 0.098 * TIME_SCALE; // Increased velocity scaling by 1.4 times
+            newPlanet.v_x = dx * 0.098 * TIME_SCALE; // Adjusted for time scaling
             newPlanet.v_y = dy * 0.098 * TIME_SCALE;
             planets.push(newPlanet);
         }
