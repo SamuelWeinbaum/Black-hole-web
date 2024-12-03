@@ -102,7 +102,7 @@
         }
         /* Touch controls */
         #touch-controls {
-            display: none;
+            display: flex;
             position: fixed;
             bottom: 20px;
             left: 50%;
@@ -133,22 +133,11 @@
         .close-button {
             width: 30px;
             height: 30px;
-            background: rgb(255, 69, 58);
+            background: transparent;
+            color: rgb(70, 80, 95);
             font-size: 16px;
-        }
-        .show-button {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            display: none;
-            background: rgb(70, 80, 95);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
             cursor: pointer;
+            border: none;
         }
         .info-toggle-button {
             position: fixed;
@@ -161,14 +150,6 @@
             border-radius: 10px;
             padding: 10px;
             cursor: pointer;
-        }
-        @media (pointer: coarse) {
-            #touch-controls {
-                display: flex;
-            }
-            .show-button {
-                display: block;
-            }
         }
     </style>
 </head>
@@ -186,10 +167,8 @@
         <button class="touch-button" onclick="adjustMass('decrease')">-</button>
         <button class="touch-button" onclick="clearAllPlanets()">X</button>
         <button class="touch-button" onclick="clearSelectedPlanet()">C</button>
-        <button class="touch-button close-button" onclick="toggleTouchControls()">X</button>
     </div>
-    <button class="show-button" onclick="toggleTouchControls()">Show Controls</button>
-    <button class="info-toggle-button" onclick="toggleInfoBar()">Info</button>
+    <button class="info-toggle-button" onclick="toggleInfo()">Info</button>
     <script src="planet.js"></script>
     <script src="game.js"></script>
 </body>

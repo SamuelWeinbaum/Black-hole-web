@@ -8,7 +8,7 @@ const ACCENT_COLOR = 'rgb(94, 114, 228)';
 const GRID_COLOR = 'rgb(230, 235, 240)';
 const SHADOW_COLOR = 'rgba(0, 0, 0, 0.15)';
 const G = 0.3;
-const TIME_SCALE = 0.6; // Slow down the simulation by 0.6 times
+const TIME_SCALE = 0.3; // Slow down the simulation by a factor of 2
 
 // Game state
 let planets = [];
@@ -54,31 +54,31 @@ function drawControls() {
     controls.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <span style="font-size: 18px; color: ${UI_COLOR};">Controls</span>
-            <span class="key" style="cursor: pointer; padding: 5px 10px;" onclick="document.getElementById('controls').style.display='none'">✕</span>
+            <span class="key close-button" onclick="toggleInfo()">✕</span>
         </div>
         <div class="control-item">
-            <span class="key">Space</span>
-            <span class="action">Create Planet</span>
+            <span class="key">Tap</span>
+            <span class="action">Add a planet at the tap location</span>
         </div>
         <div class="control-item">
-            <span class="key">P</span>
-            <span class="action">Pause</span>
+            <span class="key">Swipe</span>
+            <span class="action">Add a planet with velocity based on swipe direction and length</span>
+        </div>
+        <div class="control-item">
+            <span class="key">+</span>
+            <span class="action">Increase mass of selected planet</span>
+        </div>
+        <div class="control-item">
+            <span class="key">-</span>
+            <span class="action">Decrease mass of selected planet</span>
         </div>
         <div class="control-item">
             <span class="key">X</span>
-            <span class="action">Clear All</span>
+            <span class="action">Clear all planets</span>
         </div>
         <div class="control-item">
             <span class="key">C</span>
-            <span class="action">Clear Selected</span>
-        </div>
-        <div class="control-item">
-            <span class="key">Arrow Keys</span>
-            <span class="action">Move Selected</span>
-        </div>
-        <div class="control-item">
-            <span class="key">U/D</span>
-            <span class="action">Increase/Decrease Mass</span>
+            <span class="action">Clear selected planet</span>
         </div>
     `;
 }
@@ -428,13 +428,9 @@ function createPlanet() {
     selectedPlanet = newPlanet;
 }
 
-function toggleInfoBar() {
+function toggleInfo() {
     const controls = document.getElementById('controls');
-    if (controls.style.display === 'none' || controls.style.display === '') {
-        controls.style.display = 'block';
-    } else {
-        controls.style.display = 'none';
-    }
+    controls.style.display = controls.style.display === 'block' ? 'none' : 'block';
 }
 
 // Initialize game
